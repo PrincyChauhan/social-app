@@ -16,7 +16,7 @@ async function Sidebar() {
   if (!user) return null;
 
   return (
-    <div className="sticky top-20 w-64">
+    <div className="hidden md:block w-64 top-20">
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-col items-center text-center">
@@ -24,15 +24,13 @@ async function Sidebar() {
               href={`/profile/${user.username}`}
               className="flex flex-col items-center justify-center"
             >
-              <Avatar className="w-20 h-20 border-2">
+              <Avatar className="w-20 h-20 border-2 ">
                 <AvatarImage src={user.image || "/avatar.png"} />
               </Avatar>
 
               <div className="mt-4 space-y-1">
-                <h3 className="text-lg font-semibold">{user.name}</h3>
-                <p className="text-sm text-muted-foreground">
-                  @{user.username}
-                </p>
+                <h3 className="font-semibold">{user.name}</h3>
+                <p className="text-sm text-muted-foreground">{user.username}</p>
               </div>
             </Link>
 
@@ -42,13 +40,13 @@ async function Sidebar() {
 
             <div className="w-full">
               <Separator className="my-4" />
-              <div className="flex items-center justify-between text-center">
-                <div className="flex flex-col items-center">
+              <div className="flex justify-between">
+                <div>
                   <p className="font-medium">{user._count.following}</p>
                   <p className="text-xs text-muted-foreground">Following</p>
                 </div>
-                <Separator orientation="vertical" className="h-8" />
-                <div className="flex flex-col items-center">
+                <Separator orientation="vertical" />
+                <div>
                   <p className="font-medium">{user._count.followers}</p>
                   <p className="text-xs text-muted-foreground">Followers</p>
                 </div>
@@ -56,19 +54,18 @@ async function Sidebar() {
               <Separator className="my-4" />
             </div>
 
-            <div className="w-full space-y-2 text-sm text-muted-foreground">
-              <div className="flex items-center">
+            <div className="w-full space-y-2 text-sm">
+              <div className="flex items-center text-muted-foreground">
                 <MapPinIcon className="w-4 h-4 mr-2" />
                 {user.location || "No location"}
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center text-muted-foreground">
                 <LinkIcon className="w-4 h-4 mr-2 shrink-0" />
                 {user.website ? (
                   <a
-                    href={user.website}
+                    href={`${user.website}`}
+                    className="hover:underline truncate"
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline truncate max-w-[10rem]"
                   >
                     {user.website}
                   </a>
@@ -87,15 +84,15 @@ async function Sidebar() {
 export default Sidebar;
 
 const UnAuthenticatedSidebar = () => (
-  <div className="sticky top-20 w-64">
+  <div className="hidden md:block sticky top-20">
     <Card>
       <CardHeader>
         <CardTitle className="text-center text-xl font-semibold">
           Welcome Back!
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-center text-muted-foreground">
+      <CardContent>
+        <p className="text-center text-muted-foreground mb-4">
           Login to access your profile and connect with others.
         </p>
         <SignInButton mode="modal">
@@ -104,7 +101,7 @@ const UnAuthenticatedSidebar = () => (
           </Button>
         </SignInButton>
         <SignUpButton mode="modal">
-          <Button className="w-full" variant="default">
+          <Button className="w-full mt-2" variant="default">
             Sign Up
           </Button>
         </SignUpButton>
