@@ -7,10 +7,11 @@ import { revalidatePath } from "next/cache";
 export async function createPost(content: string, imageUrl: string) {
   try {
     const userId = await getDbUserId();
+    if (!userId) throw new Error("User not authenticated");
     const post = await prisma.post.create({
       data: {
         content,
-        imageUrl,
+        image: imageUrl,
         authorId: userId,
       },
     });
@@ -64,9 +65,10 @@ export async function getPosts() {
         },
       },
     });
-    return posts;
+    return posts || [];
   } catch (error) {
     console.log("Error in getposts", error);
+    return [];
   }
 }
 
