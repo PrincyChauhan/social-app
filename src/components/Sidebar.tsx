@@ -84,7 +84,7 @@ async function Sidebar() {
 export default Sidebar;
 
 const UnAuthenticatedSidebar = () => (
-  <div className="hidden md:block sticky top-20">
+  <div className="hidden md:block w-64 top-20">
     <Card>
       <CardHeader>
         <CardTitle className="text-center text-xl font-semibold">
