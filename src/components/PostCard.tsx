@@ -25,26 +25,7 @@ import { Textarea } from "./ui/textarea";
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
 
-// Update the author type to include the id property
-interface Author {
-  id: string; // Adding the missing id property
-  name: string | null;
-  username: string;
-  image: string | null;
-}
-
-// Create a modified Post type that includes the correct author type
-interface PostWithAuthor extends Omit<Post, "author"> {
-  author: Author;
-}
-
-function PostCard({
-  post,
-  dbUserId,
-}: {
-  post: PostWithAuthor;
-  dbUserId: string | null;
-}) {
+function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
   const { user } = useUser();
   const [newComment, setNewComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
@@ -103,6 +84,10 @@ function PostCard({
     }
   };
 
+  // Check if the post author is the current user
+  // We need to use a more flexible approach since post.author might not have an 'id' property
+  const isAuthor = dbUserId && post.authorId === dbUserId;
+
   return (
     <Card className="mb-6 md:ml-60 w-full max-w-3xl overflow-hidden">
       <CardContent className="p-4 sm:p-6">
@@ -135,7 +120,7 @@ function PostCard({
                   </div>
                 </div>
                 {/* Check if current user is the post author */}
-                {dbUserId === post.author.id && (
+                {isAuthor && (
                   <DeleteAlertDialog
                     isDeleting={isDeleting}
                     onDelete={handleDeletePost}
