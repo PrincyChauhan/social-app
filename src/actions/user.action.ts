@@ -1,6 +1,7 @@
 "use server";
-import { auth, currentUser } from "@clerk/nextjs/server";
+
 import { prisma } from "@/lib/prisma";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 export async function syncUser() {
   try {
@@ -14,9 +15,7 @@ export async function syncUser() {
       },
     });
 
-    if (existingUser) {
-      return existingUser;
-    }
+    if (existingUser) return existingUser;
 
     const dbUser = await prisma.user.create({
       data: {
@@ -30,7 +29,7 @@ export async function syncUser() {
     });
     return dbUser;
   } catch (error) {
-    console.log("Error syncing user:", error);
+    console.log("Error in syncUser", error);
   }
 }
 
@@ -54,7 +53,6 @@ export async function getUserByClerkId(clerkId: string) {
 export async function getDbUserId() {
   const { userId: clerkId } = await auth();
   if (!clerkId) return null;
-
   const user = await getUserByClerkId(clerkId);
   if (!user) throw new Error("User not found");
   return user.id;
@@ -67,6 +65,7 @@ export async function getRandomUsers() {
     const randomUsers = await prisma.user.findMany({
       where: {
         AND: [
+          { NOT: { id: userId } },
           {
             NOT: {
               followers: {
@@ -89,11 +88,11 @@ export async function getRandomUsers() {
           },
         },
       },
-      take: 3,
+      take: 5,
     });
     return randomUsers;
   } catch (error) {
-    console.log("Error fetching random users:", error);
+    console.log("Error fetching random users", error);
     return [];
   }
 }
