@@ -25,7 +25,26 @@ import { Textarea } from "./ui/textarea";
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
 
-function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
+// Update the author type to include the id property
+interface Author {
+  id: string; // Adding the missing id property
+  name: string | null;
+  username: string;
+  image: string | null;
+}
+
+// Create a modified Post type that includes the correct author type
+interface PostWithAuthor extends Omit<Post, "author"> {
+  author: Author;
+}
+
+function PostCard({
+  post,
+  dbUserId,
+}: {
+  post: PostWithAuthor;
+  dbUserId: string | null;
+}) {
   const { user } = useUser();
   const [newComment, setNewComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
