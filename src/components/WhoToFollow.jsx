@@ -10,7 +10,7 @@ async function WhoToFollow() {
   return (
     <Card className="mb-6 md:ml-60 w-full max-w-3xl">
       <CardHeader>
-        <CardTitle>Who to follow</CardTitle>
+        <CardTitle>Who to Follow</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -46,5 +46,4 @@ async function WhoToFollow() {
     </Card>
   );
 }
-
 export default WhoToFollow;

@@ -3,12 +3,12 @@
 import { prisma } from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+
 export async function syncUser() {
   try {
     const { userId } = await auth();
     const user = await currentUser();
     if (!userId || !user) return;
-
     const existingUser = await prisma.user.findUnique({
       where: {
         clerkId: userId,
@@ -27,6 +27,7 @@ export async function syncUser() {
         image: user.imageUrl,
       },
     });
+
     return dbUser;
   } catch (error) {
     console.log("Error in syncUser", error);
